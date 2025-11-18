@@ -12,6 +12,12 @@ Solverse is a decentralized task management platform built on the Solana blockch
 - [Usage](#usage)
 - [Technical Specifications](#technical-specifications)
 
+## Deployment
+
+The Solverse program is deployed on Solana devnet with the following program ID:
+[4kruCJtCQbxT1AQxZprCe7MfBVwFBJKYsdySz8ECPe6p](https://explorer.solana.com/address/4kruCJtCQbxT1AQxZprCe7MfBVwFBJKYsdySz8ECPe6p?cluster=devnet)
+
+
 ## Overview
 
 Solverse provides a trustless, decentralized solution for task management and bounty completion. The platform ensures that creators lock their rewards in escrow when creating tasks, guaranteeing payment to successful participants. The system uses Solana's high-speed, low-cost blockchain to provide a seamless experience for both task creators and participants.
