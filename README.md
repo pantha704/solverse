@@ -1,6 +1,6 @@
-# Solverse - Decentralized Task Management Platform
+# Solverse - Decentralized Bounty Platform
 
-Solverse is a decentralized task management platform built on the Solana blockchain that enables creators to post tasks with rewards, and participants to complete them with guaranteed payment through an escrow mechanism.
+Solverse is a bounty management platform built on the Solana that enables anyone to post tasks with rewards, and participants to complete them with guaranteed payment through an escrow mechanism.
 
 ## Table of Contents
 - [Overview](#overview)
