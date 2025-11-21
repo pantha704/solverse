@@ -1,183 +1,461 @@
-# Solverse - Decentralized Bounty Platform
+# Solverse
 
-Solverse is a bounty management platform built on the Solana that enables anyone to post tasks with rewards, and participants to complete them with guaranteed payment through an escrow mechanism.
+> A decentralized task management platform built on Solana blockchain, enabling trustless bounty creation, submission, and reward distribution through smart contracts.
 
-## Table of Contents
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Key Features](#key-features)
-- [Workflow](#workflow)
-- [Smart Contract Functions](#smart-contract-functions)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technical Specifications](#technical-specifications)
+[![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF?logo=solana)](https://solana.com)
+[![Anchor](https://img.shields.io/badge/Anchor-v0.30-purple)](https://www.anchor-lang.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Deployment
+## 📖 Overview
 
-The Solverse program is deployed on Solana devnet with the following program ID:
-[4kruCJtCQbxT1AQxZprCe7MfBVwFBJKYsdySz8ECPe6p](https://explorer.solana.com/address/4kruCJtCQbxT1AQxZprCe7MfBVwFBJKYsdySz8ECPe6p?cluster=devnet)
+Solverse is a blockchain-based bounty platform where task creators can post tasks with SPL token rewards, participants can submit work, and winners receive automatic payouts through escrow smart contracts. All operations are trustless, transparent, and immutable on the Solana blockchain.
 
+### Key Features
 
-## Overview
+- **🎯 Task Creation**: Create tasks with customizable rewards using any SPL token
+- **💰 Escrow System**: Automatic fund locking and distribution via smart contracts
+- **⏱️ Time-Bound Tasks**: Set deadlines with automatic expiration handling
+- **✅ Winner Selection**: Task creators pick winners from submitted work
+- **🔐 Wallet Authentication**: Secure authentication via Solana wallet adapters
+- **📊 Personal Dashboard**: Track created and accepted tasks in real-time
+- **🛡️ Admin Panel**: Authorized task management and cleanup tools
+- **📱 Responsive UI**: Modern neobrutalism design optimized for all devices
 
-Solverse provides a trustless, decentralized solution for task management and bounty completion. The platform ensures that creators lock their rewards in escrow when creating tasks, guaranteeing payment to successful participants. The system uses Solana's high-speed, low-cost blockchain to provide a seamless experience for both task creators and participants.
+---
 
-## Architecture
+## 🏗️ Architecture
 
-The Solverse platform consists of a Solana program written in Rust using the Anchor framework. The core components include:
+### Tech Stack
 
-- **Task Account**: Stores task details including ID, description, creator, reward amount, start/end times, and winner
-- **Submission Account**: Stores participant submissions with links to completed work
-- **Escrow Account**: Holds the reward tokens securely until a winner is selected or refund conditions are met
-- **Token Integration**: Uses SPL tokens for reward payments
+**Blockchain Layer**
+- **Solana** - High-performance blockchain (devnet)
+- **Anchor Framework** - Smart contract development framework
+- **SPL Token Program** - Token management and transfers
 
-## Key Features
+**Frontend**
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS v4** - Utility-first styling
+- **Framer Motion** - Animation library
+- **Wallet Adapter** - Solana wallet integration
 
-- **Secure Escrow**: Reward tokens are locked in a secure escrow account upon task creation
-- **Deadline Management**: Tasks have configurable deadlines with automatic processing
-- **Multiple Submissions**: Participants can submit work via links, documents, or other digital formats
-- **Creator Control**: Task creators have full control over winner selection
-- **Automatic Refunds**: Unclaimed rewards are automatically refunded to creators after deadlines
-- **Permissionless Participation**: Anyone can participate in completing tasks
+**Development Tools**
+- **Bun** - Fast JavaScript runtime and package manager
+- **Anchor CLI** - Smart contract compilation and deployment
 
-## Workflow
+### Smart Contract Architecture
 
-The Solverse platform follows a clear workflow from task creation to reward distribution:
+```
+programs/solverse/
+├── lib.rs              # Program entry point
+├── state/              # Account structures
+│   ├── task.rs         # Task state management
+│   ├── escrow.rs       # Escrow PDA
+│   ├── submission.rs   # Work submission tracking
+│   └── participation.rs # Task acceptance tracking
+└── instructions/       # Program instructions
+    ├── create_task.rs  # Initialize task with escrow
+    ├── accept_task.rs  # Participant acceptance
+    ├── submit_work.rs  # Work submission
+    ├── pick_winner.rs  # Winner selection
+    ├── claim_reward.rs # Reward distribution
+    ├── refund_escrow.rs # Refund to creator
+    └── close_task.rs   # Account cleanup
+```
 
-### 1. Task Creation
-- A creator initiates a task with a title, description, reward amount, and deadline
-- The reward amount is transferred to an escrow account using the task ID, creator's public key, and other parameters as seeds
-- The task is registered on-chain and becomes visible to participants globally
+### Program Accounts
 
-### 2. Task Discovery
-- Tasks are displayed on a public page where participants can browse available opportunities
-- Each task shows the reward amount, deadline, description, and submission requirements
+| Account | Type | Seeds | Description |
+|---------|------|-------|-------------|
+| `Task` | PDA | `["task", creator, taskId]` | Stores task metadata and state |
+| `Escrow` | PDA | `["escrow", task]` | Holds reward funds in escrow |
+| `Submission` | PDA | `["submission", task, participant]` | Tracks work submissions |
+| `Participation` | PDA | `["participation", task, participant]` | Records task acceptance |
 
-### 3. Work Submission
-- Participants complete the required work independently
-- Submissions are made through the platform as links (URLs, Notion documents, GitHub repos, etc.)
-- Each submission is recorded on-chain with the participant's public key
+---
 
-### 4. Winner Selection
-- After the deadline expires, the task creator reviews all submissions
-- The creator selects the best submission and declares a winner
-- The winner's public key is recorded in both the task and escrow accounts
-
-### 5. Reward Distribution
-- The winner can claim their reward by calling the claim function
-- The escrow program releases the reward to the winner's address
-- The task and escrow accounts are closed after successful reward distribution
-
-### 6. Refund Scenarios
-- If no submissions are received within the deadline, the escrow is refunded to the creator
-- If none of the submissions meet the creator's requirements, the creator can close the task and receive a refund
-
-## Smart Contract Functions
-
-### `create_task`
-- Creates a new task with specified parameters
-- Initializes both Task and Escrow accounts
-- Transfers reward tokens to the escrow vault
-- Parameters: task_id, description, reward_amount, duration
-
-### `submit_work`
-- Allows participants to submit their completed work
-- Records submission with a link to the work
-- Parameters: task_id, link
-
-### `pick_winner`
-- Allows the task creator to select a winner after the deadline
-- Updates both task and escrow accounts with the winner's address
-- Parameters: task_id
-
-### `claim_reward`
-- Allows the winner to claim their reward tokens
-- Transfers tokens from escrow to winner's account
-- Closes the escrow account
-- Parameters: task_id
-
-### `refund_escrow`
-- Refunds tokens to the creator if no winner is selected
-- Used when no suitable submissions are received
-- Parameters: task_id
-
-### `close_task`
-- Closes the task account after deadline
-- Can be used to close tasks without a winner
-- Parameters: task_id
-
-## Installation
+## 🚀 Getting Started
 
 ### Prerequisites
-- Rust (latest stable version)
-- Solana CLI tools
-- Anchor framework
-- Node.js and Yarn
 
-### Setup Steps
+- **Node.js** v18+ or **Bun** v1.0+
+- **Rust** v1.70+ with `wasm32` target
+- **Solana CLI** v1.18+
+- **Anchor CLI** v0.30+
+- **Git**
 
-1. Install Rust:
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
+### Installation
 
-2. Install Solana CLI:
-```bash
-sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/solverse.git
+   cd solverse
+   ```
 
-3. Install Anchor:
-```bash
-cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
-avm install latest
-avm use latest
-```
+2. **Install Anchor dependencies**
+   ```bash
+   yarn install
+   # or
+   npm install
+   ```
 
-4. Install Node.js dependencies:
-```bash
-yarn install
-```
+3. **Install frontend dependencies**
+   ```bash
+   cd frontend
+   bun install
+   # or npm install
+   ```
 
-5. Build the program:
-```bash
-anchor build
-```
-
-## Usage
+4. **Configure Solana CLI for devnet**
+   ```bash
+   solana config set --url devnet
+   solana airdrop 2  # Get devnet SOL
+   ```
 
 ### Development
+
+#### Running the Smart Contract Tests
+
 ```bash
-# Start local Solana cluster
-solana-test-validator
+# Build the program
+anchor build
 
-# Deploy the program
-anchor deploy
-
-# Run tests
+# Run all tests
 anchor test
+
+# Run specific test
+anchor test --skip-build -- --test "Full bounty lifecycle"
 ```
 
-### Deployment
-The program can be deployed to devnet, testnet, or mainnet-beta using Anchor commands.
+#### Running the Frontend
 
-## Technical Specifications
+```bash
+cd frontend
+bun run dev
+# or npm run dev
 
-### Data Structures
-- **Task**: Contains task_id, description, creator pubkey, reward amount, timestamps, winner, and submission count
-- **Submission**: Contains participant pubkey, task reference, and submission link
-- **Escrow**: Contains seed, creator pubkey, reward token account, timestamps, and winner
+# Visit http://localhost:3000
+```
 
-### Security Features
-- PDA (Program Derived Address) based accounts for secure access control
-- Time-locked operations to prevent premature actions
-- Token account validation to prevent unauthorized access
-- Rent-exempt account closures to recover SOL
+---
 
-### Error Handling
-- `TaskEnded`: Task deadline has passed during submission
-- `TaskNotEnded`: Action attempted before deadline expiration
-- `NoSubmissions`: No valid submissions found
-- `AlreadySubmitted`: Participant already submitted to this task
-- `NotCreator`: Unauthorized access to creator functions
-- `InvalidWinner`: Invalid winner selection
-- `EscrowMismatch`: Escrow validation failure
+## 🔧 Configuration
+
+### Program ID
+
+Update the program ID in the following files after deployment:
+
+- `Anchor.toml` - `[programs.devnet]`
+- `frontend/src/lib/anchor.ts` - `PROGRAM_ID` constant
+- `programs/solverse/src/lib.rs` - `declare_id!` macro
+
+### Environment Variables
+
+Create `.env.local` in the `frontend` directory:
+
+```bash
+# Optional: Custom RPC endpoint
+NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
+
+# Optional: Network (devnet/mainnet-beta)
+NEXT_PUBLIC_NETWORK=devnet
+```
+
+---
+
+## 📝 Usage Guide
+
+### For Task Creators
+
+1. **Create a Task**
+   - Navigate to the home page
+   - Click "Create Task"
+   - Fill in task details (ID, description, reward, duration)
+   - Select reward token (USDC, USDT, Wrapped SOL, or custom)
+   - Confirm transaction in wallet
+
+2. **Review Submissions**
+   - Go to Dashboard → "My Created Tasks"
+   - Click on a task to view submissions
+   - Review participant submissions after deadline
+
+3. **Pick a Winner**
+   - Select the best submission
+   - Click "Pick Winner"
+   - Winner can claim their reward
+
+4. **Refund Escrow** (if no winner)
+   - After deadline, if no winner selected
+   - Click "Refund Escrow" to recover funds
+
+### For Participants
+
+1. **Browse Tasks**
+   - View available tasks on the home page
+   - Check reward, deadline, and description
+
+2. **Accept a Task**
+   - Click on a task to view details
+   - Click "Accept Task" to participate
+   - Submit work link before deadline
+
+3. **Claim Reward**
+   - If selected as winner, return to task page
+   - Click "Claim Reward" after deadline
+   - Tokens will be transferred to your wallet
+
+---
+
+## 🌐 Deployment
+
+### Smart Contract Deployment
+
+1. **Build the program**
+   ```bash
+   anchor build
+   ```
+
+2. **Deploy to devnet**
+   ```bash
+   anchor deploy --provider.cluster devnet
+   ```
+
+3. **Update Program ID**
+   - Copy the deployed program ID
+   - Update in all configuration files (see Configuration section)
+
+### Frontend Deployment (Vercel)
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy frontend"
+   git push origin main
+   ```
+
+2. **Deploy on Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your repository
+   - Set root directory to `frontend`
+   - Deploy!
+
+3. **Environment Variables** (Vercel Dashboard)
+   - Add `NEXT_PUBLIC_RPC_ENDPOINT` if using custom RPC
+   - Add `NEXT_PUBLIC_NETWORK` (devnet/mainnet-beta)
+
+---
+
+## 🔐 Security Considerations
+
+### Smart Contract Security
+
+- ✅ **PDA Validation**: All accounts use Program Derived Addresses with seed constraints
+- ✅ **Signer Checks**: Creator and participant signatures verified on all operations
+- ✅ **Time Guards**: Deadline enforcement prevents expired submissions
+- ✅ **State Validation**: Status checks prevent invalid state transitions
+- ✅ **Escrow Safety**: Funds locked in PDA until winner claims or creator refunds
+
+### Known Limitations
+
+- **No Multi-Winner Support**: Only one winner per task
+- **No Submission Editing**: Submissions are immutable after creation
+- **No Task Cancellation**: Tasks cannot be cancelled before deadline
+- **Devnet Only**: Currently deployed on devnet for testing
+
+---
+
+## 🧪 Testing
+
+### Test Coverage
+
+- ✅ Full bounty lifecycle (create → submit → pick → claim)
+- ✅ Refund escrow when no winner
+- ✅ Edge cases (zero duration, late submissions, early picks)
+- ✅ Invalid winner validation
+- ✅ Non-creator authorization checks
+- ✅ Claim reward validation (before deadline, non-winner)
+
+### Running Tests
+
+```bash
+# All tests
+anchor test
+
+# With logs
+anchor test -- --nocapture
+
+# Specific test file
+anchor test --skip-build tests/solverse.ts
+```
+
+---
+
+## 📚 API Reference
+
+### Program Instructions
+
+#### `create_task`
+Creates a new task with escrow funding.
+
+**Accounts**
+- `creator` - Task creator (signer, payer)
+- `task` - Task PDA (init)
+- `escrow` - Escrow PDA (init)
+- `reward_mint` - SPL token mint for rewards
+
+**Arguments**
+- `task_id: String` - Unique task identifier
+- `description: String` - Task description
+- `reward: u64` - Reward amount (in smallest token units)
+- `duration: i64` - Task duration in seconds
+
+#### `accept_task`
+Participant accepts a task.
+
+**Accounts**
+- `participant` - Task participant (signer, payer)
+- `task` - Task PDA
+- `participation` - Participation PDA (init)
+
+**Arguments**
+- `task_id: String` - Task identifier
+
+#### `submit_work`
+Submit work for a task.
+
+**Accounts**
+- `participant` - Submitter (signer)
+- `task` - Task PDA
+- `submission` - Submission PDA (init)
+
+**Arguments**
+- `task_id: String` - Task identifier
+- `link: String` - Submission link
+
+#### `pick_winner`
+Creator selects a winner.
+
+**Accounts**
+- `creator` - Task creator (signer)
+- `task` - Task PDA (mut)
+- `submission` - Winning submission PDA
+- `escrow` - Escrow PDA (mut)
+
+**Arguments**
+- `task_id: String` - Task identifier
+
+#### `claim_reward`
+Winner claims their reward.
+
+**Accounts**
+- `winner` - Winner (signer)
+- `task` - Task PDA
+- `escrow` - Escrow PDA (mut, close)
+- `escrow_vault` - Escrow token account (mut, close)
+- `winner_token_account` - Winner's token account (mut)
+
+**Arguments**
+- `task_id: String` - Task identifier
+
+#### `refund_escrow`
+Creator refunds escrow if no winner.
+
+**Accounts**
+- `creator` - Task creator (signer)
+- `task` - Task PDA
+- `escrow` - Escrow PDA (mut, close)
+- `escrow_vault` - Escrow token account (mut, close)
+- `creator_token_account` - Creator's token account (mut)
+
+**Arguments**
+- `task_id: String` - Task identifier
+
+#### `close_task`
+Closes a task account (creator only).
+
+**Accounts**
+- `creator` - Task creator (signer)
+- `task` - Task PDA (mut, close)
+
+**Arguments**
+- `task_id: String` - Task identifier
+
+---
+
+## 🛠️ Admin Tools
+
+### Bulk Task Deletion
+
+For cleaning up test tasks:
+
+```bash
+cd frontend
+bun run scripts/close-all-tasks.ts
+```
+
+This script:
+- Fetches all tasks created by your wallet
+- Closes each task account
+- Returns rent to your wallet
+
+### Admin Page
+
+Access at `/admin` (authorized wallets only):
+- Close individual tasks by ID
+- Wallet authorization check
+- Visual feedback for operations
+
+To authorize wallets, edit `frontend/src/app/admin/page.tsx`:
+```typescript
+const AUTHORIZED_ADMINS = [
+  "YourWalletAddressHere...",
+];
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Commit your changes** (`git commit -m 'Add amazing feature'`)
+4. **Push to the branch** (`git push origin feature/amazing-feature`)
+5. **Open a Pull Request**
+
+### Development Guidelines
+
+- Follow existing code style and conventions
+- Write tests for new features
+- Update documentation for API changes
+- Ensure all tests pass before submitting PR
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- Built with [Anchor Framework](https://www.anchor-lang.com/)
+- UI powered by [Next.js](https://nextjs.org/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Wallet integration via [Solana Wallet Adapter](https://github.com/solana-labs/wallet-adapter)
+
+---
+
+## 📧 Support
+
+For questions and support:
+- **Issues**: [GitHub Issues](https://github.com/yourusername/solverse/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/solverse/discussions)
+- **Twitter**: [@yourusername](https://twitter.com/yourusername)
+
+---
+
+**Built with ❤️ on Solana**
