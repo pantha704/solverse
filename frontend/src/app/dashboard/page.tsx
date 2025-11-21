@@ -66,20 +66,26 @@ export default function Dashboard() {
         (p: any) => p.account.participant.toString() === wallet.publicKey!.toString()
       );
 
-      // Fetch tasks for participations
+      // Fetch tasks for participations (skip if task was deleted)
       const accepted: Task[] = [];
       for (const participation of userParticipations) {
-        const taskPubkey = participation.account.task;
-        const taskAccount = await program.account.task.fetch(taskPubkey);
+        try {
+          const taskPubkey = participation.account.task;
+          const taskAccount = await program.account.task.fetch(taskPubkey);
 
-        accepted.push({
-          taskId: taskAccount.taskId,
-          description: taskAccount.description,
-          creator: taskAccount.creator,
-          reward: taskAccount.reward.toNumber() / 1e6, // SPL tokens (6 decimals)
-          endTime: taskAccount.endTime.toNumber(),
-          submissionCount: taskAccount.submissionCount,
-        });
+          accepted.push({
+            taskId: taskAccount.taskId,
+            description: taskAccount.description,
+            creator: taskAccount.creator,
+            reward: taskAccount.reward.toNumber() / 1e6, // SPL tokens (6 decimals)
+            endTime: taskAccount.endTime.toNumber(),
+            submissionCount: taskAccount.submissionCount,
+          });
+        } catch (error) {
+          // Task was deleted, skip this participation
+          console.log("Skipping deleted task:", participation.account.task.toString());
+          continue;
+        }
       }
 
       setAcceptedTasks(accepted);
@@ -128,17 +134,19 @@ export default function Dashboard() {
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-12"
+          transition={{ duration: 0.5 }}
         >
-          <h1 className="text-5xl font-bold uppercase text-black mb-4">
-            My Dashboard
-          </h1>
-          <div className="brutal-border brutal-shadow-md bg-white p-4">
-            <p className="font-mono text-sm break-all">{wallet.publicKey.toString()}</p>
-          </div>
-        </motion.div>
+          <Card className="mb-8 bg-leaf-pale border-leaf-primary">
+            <h1 className="text-4xl font-bold mb-3 uppercase">My Dashboard</h1>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-bold text-gray-dark">Wallet:</p>
+              <p className="text-sm font-mono bg-white px-3 py-1 brutal-border inline-block">
+                {wallet.publicKey.toString().slice(0, 4)}...{wallet.publicKey.toString().slice(-4)}
+              </p>
+            </div>
+          </Card></motion.div>
 
         {loading ? (
           <div className="text-center text-2xl font-bold">Loading...</div>
