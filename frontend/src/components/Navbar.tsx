@@ -26,9 +26,9 @@ export default function Navbar() {
                 height={48}
                 className="brutal-border brutal-shadow-sm"
               />
-              <span className="text-3xl font-bold text-white uppercase tracking-tight">
+              {/* <span className="text-3xl font-bold text-white uppercase tracking-tight">
                 Solverse
-              </span>
+              </span> */}
             </motion.div>
           </Link>
 
@@ -36,8 +36,14 @@ export default function Navbar() {
           <div className="flex items-center gap-6">
             <Link href="/">
               <motion.span
-                whileHover={{ scale: 1.1 }}
-                className="text-white font-bold hover:text-accent-yellow transition-colors"
+                whileHover={{
+                  scale: 1.15,
+                  rotate: -2,
+                  y: -2
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                className="text-white font-bold hover:text-accent-yellow transition-all cursor-pointer inline-block px-3 py-1 hover:bg-black/10 brutal-border-sm"
               >
                 TASKS
               </motion.span>
@@ -45,8 +51,14 @@ export default function Navbar() {
             {publicKey && (
               <Link href="/dashboard">
                 <motion.span
-                  whileHover={{ scale: 1.1 }}
-                  className="text-white font-bold hover:text-accent-yellow transition-colors"
+                  whileHover={{
+                    scale: 1.15,
+                    rotate: 2,
+                    y: -2
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="text-white font-bold hover:text-accent-yellow transition-all cursor-pointer inline-block px-3 py-1 hover:bg-black/10 brutal-border-sm"
                 >
                   DASHBOARD
                 </motion.span>

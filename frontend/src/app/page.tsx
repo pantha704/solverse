@@ -219,8 +219,39 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-leaf-pale py-12 px-6">
+    <div className="min-h-screen bg-leaf-pale py-12 px-4">
       <div className="container mx-auto max-w-7xl">
+        {/* Hero Section */}
+        <motion.section
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 text-center"
+        >
+          <h1 className="mb-6">
+            <span className="block text-7xl md:text-7xl font-black text-black uppercase tracking-tight italic" style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.2)' }}>
+              BUILD.
+            </span>
+            <span className="block text-7xl md:text-7xl font-black text-black uppercase tracking-tight italic" style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.2)' }}>
+              SUBMIT.
+            </span>
+            <span
+              className="block text-7xl md:text-7xl font-black uppercase tracking-tight italic"
+              style={{
+                color: '#ec4899',
+                WebkitTextStroke: '3px black',
+                textShadow: '6px 6px 0px rgba(0,0,0,0.3)'
+              }}
+            >
+              EARN.
+            </span>
+          </h1>
+          <p className="text-2xl md:text-3xl font-bold text-gray-dark mb-8">
+            The decentralized task marketplace on Solana.
+          </p>
+        </motion.section>
+
+        {/* Task List Section */}
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <motion.h1
