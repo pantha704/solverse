@@ -52,7 +52,9 @@ export default function Navbar() {
                 </motion.span>
               </Link>
             )}
-            <WalletMultiButton className="!brutal-border !brutal-shadow-md !bg-accent-yellow !text-black !font-bold !uppercase !px-6 !py-3 hover:!bg-yellow-300 !transition-all" />
+            <div suppressHydrationWarning>
+              <WalletMultiButton className="!brutal-border !brutal-shadow-md !bg-accent-yellow !text-black !font-bold !uppercase !px-6 !py-3 hover:!bg-yellow-300 !transition-all" />
+            </div>
           </div>
         </div>
       </div>
