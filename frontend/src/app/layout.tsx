@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Solverse - Decentralized Task Management",
+  title: "Solverse",
   description: "Create, accept, and complete tasks on Solana blockchain",
   icons: {
     icon: '/favicon.ico',
