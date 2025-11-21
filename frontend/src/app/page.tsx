@@ -56,7 +56,7 @@ export default function Home() {
   const POPULAR_TOKENS = {
     usdc: {
       name: "USDC (Devnet)",
-      mint: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU", // USDC devnet
+      mint: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr", // USDC devnet
     },
     usdt: {
       name: "USDT (Devnet)",
@@ -246,7 +246,7 @@ export default function Home() {
               EARN.
             </span>
           </h1>
-          <p className="text-2xl md:text-3xl mt-16 font-mono font-bold text-gray-dark mb-28">
+          <p className="text-2xl md:text-3xl mt-16 font-mono font-bold text-gray-dark mb-32">
             The decentralized task marketplace on Solana.
           </p>
         </motion.section>
@@ -264,13 +264,15 @@ export default function Home() {
           </motion.h1>
 
           {wallet.publicKey && (
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => setShowCreateModal(true)}
-            >
-              + Create Task
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => setShowCreateModal(true)}
+              >
+                + Create Task
+              </Button>
+            </div>
           )}
         </div>
 
@@ -375,7 +377,7 @@ export default function Home() {
           </div>
 
           <div>
-            <label className="block font-bold mb-2 uppercase text-sm">Reward (Tokens)</label>
+            <label className="block font-bold uppercase text-sm">Reward (Tokens)</label>
             <input
               type="number"
               step="0.01"
@@ -401,7 +403,7 @@ export default function Home() {
               <select
                 value={durationUnit}
                 onChange={(e) => setDurationUnit(e.target.value as "minutes" | "hours" | "days")}
-                className="brutal-border brutal-shadow-sm px-4 py-3 focus:outline-none focus:brutal-shadow-lg transition-all bg-white font-bold"
+                className="w-30 brutal-border brutal-shadow-sm px-4 py-3 focus:outline-none focus:brutal-shadow-lg transition-all bg-white font-bold"
               >
                 <option value="minutes">Minutes</option>
                 <option value="hours">Hours</option>
@@ -411,8 +413,18 @@ export default function Home() {
           </div>
 
           <div>
-            <label className="block font-bold mb-2 uppercase text-sm">Reward Token</label>
-
+            <div className="flex gap-2 items-center mb-2">
+              <label className="block font-bold uppercase text-sm">Reward Token</label>
+              <a
+                href="https://spl-token-faucet.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="xs">
+                  Get Tokens ↗
+                </Button>
+              </a>
+            </div>
             <div className="flex gap-2 mb-3">
               {/* Custom Token Input */}
               <input
@@ -424,7 +436,7 @@ export default function Home() {
                   }
                 }}
                 className="flex-1 brutal-border brutal-shadow-sm px-4 py-3 focus:outline-none focus:brutal-shadow-lg transition-all"
-                placeholder="Token mint address"
+                placeholder="Token mint `add`ress"
                 required
                 disabled={selectedToken !== "custom"}
               />
@@ -441,12 +453,12 @@ export default function Home() {
                     setRewardMint("");
                   }
                 }}
-                className="brutal-border brutal-shadow-sm px-4 py-3 focus:outline-none focus:brutal-shadow-lg transition-all bg-white font-bold"
+                className="w-30 brutal-border brutal-shadow-sm px-4 py-3 focus:outline-none focus:brutal-shadow-lg transition-all bg-white font-bold"
               >
                 <option value="usdc">{POPULAR_TOKENS.usdc.name}</option>
                 <option value="usdt">{POPULAR_TOKENS.usdt.name}</option>
                 <option value="sol">{POPULAR_TOKENS.sol.name}</option>
-                <option value="custom">Custom</option>
+                <option value="custom">Custom Token</option>
               </select>
             </div>
 
