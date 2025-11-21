@@ -38,3 +38,19 @@ pub struct Escrow {
     pub winner: Option<Pubkey>,
     pub bump: u8,
 }
+
+#[account]
+#[derive(InitSpace)]
+pub struct Participation {
+    pub participant: Pubkey,
+    pub task: Pubkey,
+    pub status: ParticipationStatus,
+    pub bump: u8,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq, Eq)]
+pub enum ParticipationStatus {
+    Accepted,
+    Submitted,
+    Completed,
+}

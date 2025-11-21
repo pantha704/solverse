@@ -1,26 +1,131 @@
 @import "tailwindcss";
 
+/* Leafy Green Neobrutalism Theme */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary Green Shades */
+  --leaf-dark: #1a4d2e;
+  --leaf-primary: #2d7a4f;
+  --leaf-medium: #4caf50;
+  --leaf-light: #81c784;
+  --leaf-pale: #c8e6c9;
+
+  /* Accent Colors */
+  --accent-yellow: #ffd93d;
+  --accent-red: #ff6b6b;
+  --accent-blue: #4ecdc4;
+
+  /* Neutrals */
+  --black: #0f0f0f;
+  --white: #fafafa;
+  --gray-dark: #333333;
+  --gray-light: #e0e0e0;
+
+  /* System */
+  --background: var(--white);
+  --foreground: var(--black);
+  --border: var(--black);
+  --shadow: var(--black);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-leaf-dark: var(--leaf-dark);
+  --color-leaf-primary: var(--leaf-primary);
+  --color-leaf-medium: var(--leaf-medium);
+  --color-leaf-light: var(--leaf-light);
+  --color-leaf-pale: var(--leaf-pale);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-red: var(--accent-red);
+  --color-accent-blue: var(--accent-blue);
+  --color-black: var(--black);
+  --color-white: var(--white);
+  --color-gray-dark: var(--gray-dark);
+  --color-gray-light: var(--gray-light);
+
+  /* Neobrutalism Shadows */
+  --shadow-brutal-sm: 2px 2px 0px var(--shadow);
+  --shadow-brutal-md: 4px 4px 0px var(--shadow);
+  --shadow-brutal-lg: 6px 6px 0px var(--shadow);
+  --shadow-brutal-xl: 8px 8px 0px var(--shadow);
+
+  /* Border */
+  --border-brutal: 3px solid var(--border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  /* margin: 0; */
+  /* padding: 0; */
+  /* box-sizing: border-box; */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Neobrutalism Base Styles */
+.brutal-border {
+  border: 3px solid var(--black);
+}
+
+.brutal-shadow-sm {
+  box-shadow: 2px 2px 0px var(--black);
+}
+
+.brutal-shadow-md {
+  box-shadow: 4px 4px 0px var(--black);
+}
+
+.brutal-shadow-lg {
+  box-shadow: 6px 6px 0px var(--black);
+}
+
+.brutal-shadow-xl {
+  box-shadow: 8px 8px 0px var(--black);
+}
+
+/* Transitions */
+.brutal-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brutal-transition:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--black);
+}
+
+/* Remove default button styles */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input,
+textarea {
+  font-family: inherit;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-light);
+  border-left: 3px solid var(--black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--leaf-medium);
+  border: 3px solid var(--black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--leaf-primary);
 }

@@ -1,0 +1,26 @@
+{
+  "servers": [
+    {
+      "name": "context7-mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
+      "transport": "stdio",
+      "environment": {}
+    },
+    {
+      "name": "github-mcp-server",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "ghcr.io/github/github-mcp-server:0.21.0"
+      ],
+      "transport": "stdio"
+    }
+  ]
+}

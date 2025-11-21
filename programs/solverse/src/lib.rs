@@ -21,6 +21,13 @@ pub mod solverse {
         _create_task(ctx, task_id, description, reward_amount, duration)
     }
 
+    pub fn accept_task(
+        ctx: Context<AcceptTask>,
+        task_id: String,
+    ) -> Result<()> {
+        _accept_task(ctx, task_id)
+    }
+
     pub fn submit_work(
         ctx: Context<SubmitWork>,
         task_id: String,

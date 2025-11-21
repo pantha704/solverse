@@ -139,6 +139,29 @@ describe("solverse", () => {
       .signers([creator])
       .rpc();
 
+    // Accept Task
+    const [participation] = PublicKey.findProgramAddressSync(
+      [Buffer.from("participation"), task.toBuffer(), participant.publicKey.toBuffer()],
+      program.programId
+    );
+
+    await program.methods
+      .acceptTask(taskId)
+      .accounts({
+        participant: participant.publicKey,
+        creator: creator.publicKey,
+        task,
+        participation,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([participant])
+      .rpc();
+
+    const participationAccount = await program.account.participation.fetch(participation);
+    assert.ok(participationAccount.status.accepted);
+    assert.equal(participationAccount.participant.toBase58(), participant.publicKey.toBase58());
+    assert.equal(participationAccount.task.toBase58(), task.toBase58());
+
     // Submit
     [submission] = PublicKey.findProgramAddressSync(
       [Buffer.from("submission"), task.toBuffer(), participant.publicKey.toBuffer()],
@@ -509,7 +532,7 @@ describe("solverse", () => {
         .rpc();
       assert.fail("Should have failed with InvalidWinner");
     } catch (e) {
-       assert.include(e.message, "ConstraintSeeds");
+      assert.include(e.message, "ConstraintSeeds");
     }
   });
 
@@ -589,7 +612,7 @@ describe("solverse", () => {
       assert.include(e.message, "ConstraintSeeds");
     }
   });
-    describe("claim_reward", () => {
+  describe("claim_reward", () => {
     let taskId: string;
     let task: PublicKey;
     let escrow: PublicKey;
@@ -736,15 +759,15 @@ describe("solverse", () => {
       const fakeWinner = Keypair.generate()
 
       await provider.sendAndConfirm(
-      new anchor.web3.Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: creator.publicKey,
-          toPubkey: fakeWinner.publicKey,
-          lamports: 100_000_000, // 0.1 SOL
-        })
-      ),
-      [creator]
-    );
+        new anchor.web3.Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: creator.publicKey,
+            toPubkey: fakeWinner.publicKey,
+            lamports: 100_000_000, // 0.1 SOL
+          })
+        ),
+        [creator]
+      );
 
       const fakeTokenAccount = getAssociatedTokenAddressSync(mint.publicKey, fakeWinner.publicKey);
       await provider.sendAndConfirm(
