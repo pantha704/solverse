@@ -226,7 +226,7 @@ export default function Home() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="my-16 mb-32 text-center"
+          className="my-16 text-center"
         >
           <h1 className="mb-6">
             <span className="block text-7xl md:text-8xl font-black text-black uppercase tracking-tight italic" style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.2)' }}>
@@ -246,7 +246,7 @@ export default function Home() {
               EARN.
             </span>
           </h1>
-          <p className="text-2xl md:text-3xl mt-16 font-mono font-bold text-gray-dark mb-2">
+          <p className="text-2xl md:text-3xl mt-16 font-mono font-bold text-gray-dark mb-28">
             The decentralized task marketplace on Solana.
           </p>
         </motion.section>
