@@ -34,20 +34,6 @@ export default function Navbar() {
 
           {/* Nav Links */}
           <div className="flex items-center gap-6">
-            <Link href="/">
-              <motion.span
-                whileHover={{
-                  scale: 1.15,
-                  rotate: -2,
-                  y: -2
-                }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="text-white font-bold hover:text-accent-yellow transition-all cursor-pointer inline-block px-3 py-1 hover:bg-black/10 brutal-border-sm"
-              >
-                TASKS
-              </motion.span>
-            </Link>
             {publicKey && (
               <Link href="/dashboard">
                 <motion.span
