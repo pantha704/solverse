@@ -452,7 +452,7 @@ export default function Home() {
                   }
                 }}
                 className="flex-1 brutal-border brutal-shadow-sm px-4 py-3 focus:outline-none focus:brutal-shadow-lg transition-all"
-                placeholder="Token mint `add`ress"
+                placeholder="Token mint address"
                 required
                 disabled={selectedToken !== "custom"}
               />
