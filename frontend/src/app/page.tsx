@@ -16,6 +16,7 @@ import { createAssociatedTokenAccountInstruction, TOKEN_PROGRAM_ID } from "@sola
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Modal from "@/components/ui/Modal";
+import Tooltip from "@/components/ui/Tooltip";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -415,15 +416,30 @@ export default function Home() {
           <div>
             <div className="flex gap-2 items-center mb-2">
               <label className="block font-bold uppercase text-sm">Reward Token</label>
-              <a
-                href="https://spl-token-faucet.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button size="xs">
-                  Get Tokens ↗
-                </Button>
-              </a>
+              <Tooltip content={
+                <div>
+                  <p className="mb-2">
+                    We use SPL tokens on Devnet because native SOL is not currently supported for this feature.
+                  </p>
+                  <p>
+                    You can get free Devnet tokens from the{" "}
+                    <a
+                      href="https://spl-token-faucet.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline text-leaf-primary font-bold hover:text-leaf-light"
+                    >
+                      SPL Token Faucet
+                    </a>.
+                  </p>
+                </div>
+              }>
+                <div className="cursor-help">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-dark hover:text-black transition-colors">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                  </svg>
+                </div>
+              </Tooltip>
             </div>
             <div className="flex gap-2 mb-3">
               {/* Custom Token Input */}
